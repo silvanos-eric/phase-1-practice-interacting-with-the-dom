@@ -3,7 +3,9 @@ let timer = 0;
 let timerId = null;
 
 // Elements on interest
-const counter = document.querySelector("h1#counter");
+const counterEl = document.querySelector("h1#counter");
+const minusButtonEl = document.querySelector("button#minus");
+const plusButtonEl = document.querySelector("button#plus");
 
 // State update functions
 function incrementTimer() {
@@ -24,10 +26,25 @@ function updateElTextContent(el, newTextContent) {
   el.textContent = newTextContent;
 }
 
-// As soon as the page is loaded the timer should increment every second
+function updateCounterEl() {
+  updateElTextContent(counterEl, timer);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // As soon as the page is loaded the timer should increment every second
   repeatAfterInterval(() => {
     incrementTimer();
-    updateElTextContent(counter, timer);
+    updateCounterEl();
   }, 1000);
+
+  // Manually increment and decrement the counter using plus and minus buttons
+  minusButtonEl.addEventListener("click", () => {
+    decrementTimer();
+    updateCounterEl();
+  });
+
+  plusButtonEl.addEventListener("click", () => {
+    incrementTimer();
+    updateElTextContent(counterEl, timer);
+  });
 });
