@@ -67,8 +67,6 @@ function hasTimerIncreased() {
 }
 
 function addCurrentCountLikes() {
-  const currentCount = count;
-
   // Check if element already exist in the DOM,
   // if it exists, update it, else create it
   const element = document.getElementById(`${count}`);
@@ -81,6 +79,8 @@ function addCurrentCountLikes() {
     likeEl.textContent = `${count} has been liked ${numberOfLikes} ${
       numberOfLikes === 1 ? "time" : "times"
     }`;
+    likeEl.classList.add("list-group-item");
+
     likesEl.appendChild(likeEl);
   }
 }
@@ -128,6 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateElTextContent(counterEl, count);
   });
 
+  function addClass(el, className) {
+    el.classList.add(className);
+  }
+
+  function removeClass(el, className) {
+    el.classList.remove(className);
+  }
+
   // Display the number of likes associated with with a number
   likeBtnEl.addEventListener("click", () => {
     incrementLikesForCurrentNumber();
@@ -140,10 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
       pauseCounter();
       disableAllBtnsExceptPauseBtn();
       switchLabelToResume();
+      addClass(pauseBtnEl, "btn-success");
+      removeClass(pauseBtnEl, "btn-danger");
     } else {
       switchLabelToPause();
       enableAllDisabledBtns();
       incrementCounterAfterDelay();
+      removeClass(pauseBtnEl, "btn-success");
+      addClass(pauseBtnEl, "btn-danger");
     }
   });
 
@@ -154,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const newComment = document.createElement("p");
     newComment.textContent = commentInput.value;
+    newComment.classList.add("list-group-item");
 
     commentList.appendChild(newComment);
 
