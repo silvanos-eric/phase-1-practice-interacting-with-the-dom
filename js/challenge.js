@@ -9,8 +9,10 @@ let likesForPreviousCount = 0;
 const counterEl = document.querySelector("h1#counter");
 const minusBtnEl = document.querySelector("button#minus");
 const plusBtnEl = document.querySelector("button#plus");
-const heartBtnEl = document.querySelector("button#heart");
+const likeBtnEl = document.querySelector("button#heart");
 const likesEl = document.querySelector("ul.likes");
+const pauseBtnEl = document.querySelector("button#pause");
+const submitBtnEl = document.querySelector("button#submit");
 
 // State update functions
 function incrementCount() {
@@ -80,6 +82,20 @@ function addCurrentCountLikes() {
   }
 }
 
+function pauseCounter() {
+  clearInterval(timerId);
+}
+
+function disableAllBtnsExceptPauseBtn() {
+  const btns = [minusBtnEl, plusBtnEl, likeBtnEl, submitBtnEl];
+
+  btns.forEach((btn) => btn.setAttribute("disabled", true));
+}
+
+function switchLabelToResume() {
+  pauseBtnEl.textContent = "resume";
+}
+
 // DOM Manipulation
 document.addEventListener("DOMContentLoaded", () => {
   // As soon as the page is loaded the timer should increment every second
@@ -100,8 +116,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Display the number of likes associated with with a number
-  heartBtnEl.addEventListener("click", () => {
+  likeBtnEl.addEventListener("click", () => {
     incrementLikesForCurrentNumber();
     addCurrentCountLikes();
+  });
+
+  // Functionality to pause the counter
+  pauseBtnEl.addEventListener("click", () => {
+    pauseCounter();
+    disableAllBtnsExceptPauseBtn();
+    switchLabelToResume();
   });
 });
