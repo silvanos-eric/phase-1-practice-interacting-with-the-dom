@@ -14,6 +14,8 @@ const likesEl = document.querySelector("ul.likes");
 const pauseBtnEl = document.querySelector("button#pause");
 const submitBtnEl = document.querySelector("button#submit");
 const btns = [minusBtnEl, plusBtnEl, likeBtnEl, submitBtnEl];
+const form = document.querySelector("form#comment-form");
+const commentList = document.querySelector("div#list.comments");
 
 // State update functions
 function incrementCount() {
@@ -143,5 +145,18 @@ document.addEventListener("DOMContentLoaded", () => {
       enableAllDisabledBtns();
       incrementCounterAfterDelay();
     }
+  });
+
+  // Comments functionality
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const commentInput = event.target.querySelector("input#comment-input");
+
+    const newComment = document.createElement("p");
+    newComment.textContent = commentInput.value;
+
+    commentList.appendChild(newComment);
+
+    commentInput.value = "";
   });
 });
