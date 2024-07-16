@@ -13,6 +13,7 @@ const likeBtnEl = document.querySelector("button#heart");
 const likesEl = document.querySelector("ul.likes");
 const pauseBtnEl = document.querySelector("button#pause");
 const submitBtnEl = document.querySelector("button#submit");
+const btns = [minusBtnEl, plusBtnEl, likeBtnEl, submitBtnEl];
 
 // State update functions
 function incrementCount() {
@@ -87,22 +88,32 @@ function pauseCounter() {
 }
 
 function disableAllBtnsExceptPauseBtn() {
-  const btns = [minusBtnEl, plusBtnEl, likeBtnEl, submitBtnEl];
-
   btns.forEach((btn) => btn.setAttribute("disabled", true));
+}
+
+function incrementCounterAfterDelay() {
+  repeatAfterInterval(() => {
+    incrementCount();
+    updateCounterElTextContent();
+  }, 1000);
 }
 
 function switchLabelToResume() {
   pauseBtnEl.textContent = "resume";
 }
 
+function switchLabelToPause() {
+  pauseBtnEl.textContent = "pause";
+}
+
+function enableAllDisabledBtns() {
+  btns.forEach((btn) => btn.removeAttribute("disabled"));
+}
+
 // DOM Manipulation
 document.addEventListener("DOMContentLoaded", () => {
-  // As soon as the page is loaded the timer should increment every second
-  repeatAfterInterval(() => {
-    incrementCount();
-    updateCounterElTextContent();
-  }, 1000);
+  // As soon as the page is loaded, the timer should increment every second
+  incrementCounterAfterDelay();
 
   // Manually increment and decrement the counter using plus and minus buttons
   minusBtnEl.addEventListener("click", () => {
@@ -121,10 +132,16 @@ document.addEventListener("DOMContentLoaded", () => {
     addCurrentCountLikes();
   });
 
-  // Functionality to pause the counter
-  pauseBtnEl.addEventListener("click", () => {
-    pauseCounter();
-    disableAllBtnsExceptPauseBtn();
-    switchLabelToResume();
+  // Functionality to pause/resume the counter
+  pauseBtnEl.addEventListener("click", (event) => {
+    if (event.target.textContent.includes("pause")) {
+      pauseCounter();
+      disableAllBtnsExceptPauseBtn();
+      switchLabelToResume();
+    } else {
+      switchLabelToPause();
+      enableAllDisabledBtns();
+      incrementCounterAfterDelay();
+    }
   });
 });
